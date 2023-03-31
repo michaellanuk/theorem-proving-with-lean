@@ -13,9 +13,13 @@ theorem closed_eq_sum_of_first_n_nat (n : ℕ) :
     2 * (sum_of_first_n_nat n) = n * (nat.succ n) :=
 
 begin
+	-- the below directive indicates that by induction we have 2 goals:
+	-- 1 for the base case when n = 0, and 1 for the general case for n > 0
   induction n with d hd,
 
-  -- rewrite base case
+  -- the rewrite tactic modifies our proof goal according to an existing
+	-- definition or equation. Here, we can rewrite sum_of_first_n_nat 0 to
+	-- its value by definition (0):
   rw sum_of_first_n_nat,
 
   -- basic theorems nat.mul_zero for n * 0 = 0, and nat.zero_mul for 0 * n = 0:
@@ -26,10 +30,16 @@ begin
   -- generalise
   rw sum_of_first_n_nat,
 
+	-- multiply out left side
   rw nat.left_distrib,
 
+	-- rewrite our inductive hypothesis to acquire a correct equation
+	-- but one that still needs extra algebraic manipulation.
   rw hd,
 
-  -- ring tactic to equate both sides
+  -- ring tactic can be used in-place of line-by-line multiplications.
+	-- This tells Lean to intelligently search through basic equalities
+	-- underpinning the natural numbers in an attempt to make both sides
+	-- of the equation equal.
   ring
 end
